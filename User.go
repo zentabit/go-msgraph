@@ -127,6 +127,7 @@ func (u User) GetFullName() string {
 func (u User) GetProfilePicValue() (string, error) {
 	var ret string
 	err := u.graphClient.makeGETAPICall(fmt.Sprintf("/users/%s/photo/$value", u.ID), nil, &ret)
+	fmt.Println(ret)
 	return ret, err
 }
 
