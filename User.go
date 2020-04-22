@@ -123,6 +123,13 @@ func (u User) GetFullName() string {
 	return fmt.Sprintf("%v %v", u.GivenName, u.Surname)
 }
 
+// GetProfilePicValue returns the profile picture as a string
+func (u User) GetProfilePicValue() (string, error) {
+	var ret string
+	err := u.graphClient.makeGETAPICall(fmt.Sprintf("/users/%s/photo/$value", u.ID), nil, &ret)
+	return ret, err
+}
+
 // PrettySimpleString returns the User-instance simply formatted for logging purposes: {FullName (email) (activePhone)}
 func (u User) PrettySimpleString() string {
 	return fmt.Sprintf("{ %v (%v) (%v) }", u.GetFullName(), u.Mail, u.GetActivePhone())
