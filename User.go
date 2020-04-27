@@ -155,3 +155,12 @@ func (u User) Equal(other User) bool {
 		u.Mail == other.Mail && u.MobilePhone == other.MobilePhone && u.PreferredLanguage == other.PreferredLanguage &&
 		u.Surname == other.Surname && u.UserPrincipalName == other.UserPrincipalName
 }
+
+
+// add
+// some
+// comments
+// see
+// if
+// this
+// works
