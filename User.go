@@ -23,7 +23,7 @@ type User struct {
 	graphClient *GraphClient // the graphClient that called the user
 }
 
-// AboutMe Represents the request aboutMe
+// Represents the request aboutMe
 type AboutMe struct {
 	Value 	string `json:"value"`
 }
