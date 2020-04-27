@@ -23,6 +23,11 @@ type User struct {
 	graphClient *GraphClient // the graphClient that called the user
 }
 
+// Represents the request aboutMe
+type AboutMe struct {
+	Value 	string `json:"value"`
+}
+
 func (u *User) String() string {
 	return fmt.Sprintf("User(ID: \"%v\", BusinessPhones: \"%v\", DisplayName: \"%v\", GivenName: \"%v\", "+
 		"Mail: \"%v\", MobilePhone: \"%v\", PreferredLanguage: \"%v\", Surname: \"%v\", UserPrincipalName: \"%v\", "+
@@ -123,11 +128,11 @@ func (u User) GetFullName() string {
 	return fmt.Sprintf("%v %v", u.GivenName, u.Surname)
 }
 
-// GetProfilePicValue returns the profile picture as a string
-func (u User) GetProfilePicValue() (string, error) {
-	var ret string
-	err := u.graphClient.makeGETAPICall(fmt.Sprintf("/users/%s/photo/$value", u.ID), nil, &ret)
-	return ret, err
+// GetAboutMe returns the aboutMe field as a string
+func (u User) GetAboutMe() (string, error) {
+	a := AboutMe{}
+	err := u.graphClient.makeGETAPICall(fmt.Sprintf("/users/%s/aboutMe", u.ID), nil, &a)
+	return a.Value, err
 }
 
 // PrettySimpleString returns the User-instance simply formatted for logging purposes: {FullName (email) (activePhone)}
