@@ -156,6 +156,11 @@ func (u User) Equal(other User) bool {
 		u.Surname == other.Surname && u.UserPrincipalName == other.UserPrincipalName
 }
 
+// DownloadUserImg downloads the user image and saves it in folder
+func (u User) DownloadUserImg() error{
+	err := u.graphClient.MakeDownloadImgCall(u.ID)
+	return err
+}
 
 // add
 // some

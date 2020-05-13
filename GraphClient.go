@@ -153,6 +153,60 @@ func (g *GraphClient) performRequest(req *http.Request, v interface{}) error {
 	return json.Unmarshal(body, &v) // return the error of the json unmarshal
 }
 
+// MakeDownloadImgCall hej
+func (g *GraphClient) MakeDownloadImgCall(id string) error {
+	reqURL, err := url.ParseRequestURI(BaseURL)
+	if err != nil {
+		return fmt.Errorf("Unable to parse URI %v: %v", BaseURL, err)
+	}
+
+	// Add Version to API-Call, the leading slash is always added by the calling func
+	reqURL.Path = "/" + APIVersion + "/users/" + id + "/photo/$value"
+	fmt.Println(reqURL.Path)
+
+	req, err := http.NewRequest("GET", reqURL.String(), nil)
+	if err != nil {
+		return fmt.Errorf("HTTP request error: %v", err)
+	}
+
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", g.token.GetAccessToken())
+
+	getParams := url.Values{}
+
+	// TODO: Improve performance with using $skip & paging instead of retrieving all results with $top
+	// TODO: MaxPageSize is currently 999, if there are any time more than 999 entries this will make the program unpredictable... hence start to use paging (!)
+	getParams.Add("$top", strconv.Itoa(999))
+	req.URL.RawQuery = getParams.Encode() // set query parameters
+
+	httpClient := &http.Client{
+		Timeout: time.Second * 10,
+	}
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("HTTP response error: %v of http.Request: %v", err, req.URL)
+	}
+	defer resp.Body.Close() // close body when func returns
+
+	body, err := ioutil.ReadAll(resp.Body) // read body first to append it to the error (if any)
+	if resp.StatusCode < 200 || resp.StatusCode > 299 {
+		// Hint: this will mostly be the case if the tenant ID can not be found, the Application ID can not be found or the clientSecret is incorrect.
+		// The cause will be described in the body, hence we have to return the body too for proper error-analysis
+		return fmt.Errorf("StatusCode is not OK: %v. Body: %v ", resp.StatusCode, string(body))
+	}
+
+	//fmt.Println("Body: ", string(body))
+
+	if err != nil {
+		return fmt.Errorf("HTTP response read error: %v of http.Request: %v", err, req.URL)
+	}
+
+	imgPath := "./img/" + id + ".jpg"
+	
+	err = ioutil.WriteFile(imgPath, body, 0644)
+	return err
+}
+
 // ListUsers returns a list of all users
 //
 // Reference: https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_list
