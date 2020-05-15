@@ -164,3 +164,10 @@ func (u User) DownloadUserImg() error{
 	err := u.graphClient.MakeDownloadImgCall(u.ID)
 	return err
 }
+
+
+// i
+// hate
+// this
+// stop
+// pls

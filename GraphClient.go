@@ -292,3 +292,8 @@ func (g *GraphClient) UnmarshalJSON(data []byte) error {
 	}
 	return nil
 }
+
+
+// some comments
+// here 
+// too
