@@ -21,6 +21,7 @@ type User struct {
 
 	activePhone string       // private cache for the active phone number
 	graphClient *GraphClient // the graphClient that called the user
+	aboutMe 		AboutMe
 }
 
 // AboutMe Represents the request aboutMe
