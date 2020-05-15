@@ -242,7 +242,7 @@ func (g *GraphClient) GetUser(identifier string) (User, error) {
 	resource := fmt.Sprintf("/users/%v", identifier)
 	user := User{graphClient: g}
 	err := g.makeGETAPICall(resource, nil, &user)
-	err = g.makeGETAPICall(fmt.Sprintf("/users/%s/aboutMe", user.ID), nil, &user.aboutMe)
+	err = g.makeGETAPICall(fmt.Sprintf("/users/%s/aboutMe", user.ID), nil, &user.AboutMe)
 	return user, err
 }
 
