@@ -208,7 +208,8 @@ func (g *GraphClient) MakeDownloadImgCall(id string) error {
 }
 
 // ListUsers returns a list of all users
-//
+// also downloads the aboutMe field where applicable, otherwise
+// returns empty string
 // Reference: https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_list
 func (g *GraphClient) ListUsers() (Users, error) {
 	resource := "/users"
@@ -216,6 +217,11 @@ func (g *GraphClient) ListUsers() (Users, error) {
 		Users Users `json:"value"`
 	}
 	err := g.makeGETAPICall(resource, nil, &marsh)
+
+	for _, u := range marsh.Users {
+		err = g.makeGETAPICall(fmt.Sprintf("/users/%s/aboutMe", u.ID), nil, &u.AboutMe)
+	}
+	
 	marsh.Users.setGraphClient(g)
 	return marsh.Users, err
 }
