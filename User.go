@@ -129,7 +129,11 @@ func (u User) GetFullName() string {
 	return fmt.Sprintf("%v %v", u.GivenName, u.Surname)
 }
 
-
+// GetAboutMe returns the aboutMe field as a string
+func (u User) GetAboutMe() error {
+	err := u.graphClient.makeGETAPICall(fmt.Sprintf("/users/%s/aboutMe", u.ID), nil, &u.AboutMe)
+	return err
+}
 
 // PrettySimpleString returns the User-instance simply formatted for logging purposes: {FullName (email) (activePhone)}
 func (u User) PrettySimpleString() string {
@@ -154,10 +158,3 @@ func (u User) DownloadUserImg() error{
 	err := u.graphClient.MakeDownloadImgCall(u.ID)
 	return err
 }
-
-
-// i
-// hate
-// this
-// stop
-// pls
